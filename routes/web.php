@@ -21,5 +21,5 @@ Route::get('/', function () {
 Route::view('layout', 'layout');
 Route::view('hi', 'Hi');
 Route::view('post', 'front/post');
-Route::view('categorys', 'category');
-
+Route::get('/post', 'PostController@index');
+Route::post('/addpost', 'PostController@store')->name('post.add');

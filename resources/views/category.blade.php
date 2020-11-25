@@ -26,7 +26,7 @@
 									<td>{{$category->status}}</td>
 									<td colspan="2">
 										<a href="#" class="btn btn-primary  editbtn">Edit</a>
-										<button class="btn btn-danger mt-2">Delete</button>
+										<button class="btn btn-danger deletebtn">Delete</button>
 									</td>
 								</tr>
 							@endforeach
@@ -122,11 +122,29 @@
 </div>
 <!-- End of edit category modal -->
 
-<!-- form for delete post -->
-<div class="deletecontent">
-	Are You Sure? <span class="title"></span>?
-	<span class="hidden id"></span>
+<!-- for delete Category modal -->
+<div class="modal fade" id="deleteCategoryModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="CategoryCrudModal"></h4>
+        </div>
+
+        <div class="modal-body">
+	      	<form id="deleteCategory" name="categoryForm" class="form-horizontal">
+	        	@csrf
+	        	@method('DELETE')
+	          <input type="hidden" name="id" id="delete_id">
+	         	<p>Are you sure!! you want to delete this data?</p> 
+	         <button type="submit" class="btn btn-primary" id="btn-save">Delete</button>
+	         <button type="button" class="btn btn-secondary" data-dismiss="modal"> Cancel </button>
+	        </form>
+        </div>
+    </div>
+  </div>
 </div>
+<!-- End of delete category modal -->
+
 
 <!-- Ajax for addCategory -->
 <script>
@@ -192,6 +210,7 @@
 				success: function(response) {
 					$('#editCategoryModal').modal('hide');
 					alert("Category Updated");
+					window.location.reload();
 				},
 				error: function(error) {
 					console.log(error);
@@ -200,5 +219,48 @@
 		});
 	});
 </script>
+
+<script>
+	$('.deletebtn').on('click', function() {
+		$('#deleteCategoryModal').modal('show');
+
+		$tr = $(this).closest('tr');
+
+		var data = $tr.children("td").map(function() {
+			return $(this).text();
+		}).get();
+
+		console.log(data);
+
+		$('#delete_id').val(data[0]);
+	});
+
+	//AJAX for Delete data
+	$('#deleteCategory').on('submit', function(e){
+		e.preventDefault();
+
+		var id = $('#delete_id').val();
+		$.ajaxSetup({
+		  headers: {
+		    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		  }
+		});
+		$.ajax({
+			type: "DELETE",
+			url: "/category/"+id,
+			data: $('deleteCategory').serialize(),
+			success: function(response) {
+				console.log(response);
+				$('#deleteCategoryModal').modal('hide');
+				alert("Data Deleted");
+				location.reload();
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	});
+
+</script> 
 
 @endsection

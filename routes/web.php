@@ -31,3 +31,5 @@ Route::get('/category', 'CategoryController@index');
 Route::post('/addcategory', 'CategoryController@store')->name('category.add');
 Route::get('/categories/{id}', 'CategoryController@edit')->name('category.edit');
 Route::put('/category/{id}', 'CategoryController@update')->name('category.update');
+//delete Category
+Route::delete('/category/{id}', 'CategoryController@destroy');

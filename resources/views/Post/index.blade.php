@@ -45,7 +45,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal  for add post-->
 <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -82,7 +82,53 @@
 		    <label for="status">Status</label>
 		    <input type="text" class="form-control" id="status" name="status" placeholder="Status 0/1">
 		  </div>
-		  <button type="submit" class="btn btn-primary" value="create">Submit</button>
+		  <button type="submit" id="submit" class="btn btn-primary" value="create">Submit</button>
+		</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal  for edit post-->
+<div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addpost" method="POST">
+        	@csrf
+        	<input type="hidden" name="id" id="id">
+		  <div class="form-group">
+		    <label for="title">Title</label>
+		    <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title">
+		  </div>
+		  <div class="form-group">
+		    <label for="keywords">Keywords</label>
+		    <input type="text" class="form-control" id="keywords" name="keywords" placeholder="Enter Keywords">
+		  </div>
+		  <div class="form-group">
+		    <label for="description">Description</label>
+		    <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description">
+		  </div>
+		  <div class="form-group">
+		    <label for="full story">Full Story</label>
+		    <input type="text" class="form-control" id="fullstory" name="fullstory" placeholder="Enter Fullstory">
+		  </div>
+		  <div class="form-group">
+		    <label for="feature image">Feature Image</label>
+		    <input type="text" class="form-control" id="f_image" name="f_image" placeholder="Enter the image path">
+		  </div>
+		  <div class="form-group">
+		    <label for="status">Status</label>
+		    <input type="text" class="form-control" id="status" name="status" placeholder="Status 0/1">
+		  </div>
+		  <button type="submit" id="submit" class="btn btn-primary" value="create">Submit</button>
 		</form>
       </div>
     </div>
@@ -117,8 +163,25 @@
 			success:function(response){
 				console.log(response);
 				$('#posttable tbody').prepend('<tr><td>'+title+'<tr><td>'+keywords+'<tr><td>'+description+'<tr><td>'+fullstory+'<tr><td>'+f_image+'<tr><td>'+status);
-			}
+			  $('#addpost').trigger("reset");
+              $('#postModal').modal('hide');
+			},
+
+
 		});
 	})
+</script>
+
+<!-- AJAX edit post -->
+
+<script>
+	function editPost(id)
+	{
+		$get('/post/'+id, function(post){
+			$('#id').val(post.id);
+			$('#title').val(post.title);
+			
+		})
+	}
 </script>
 @endsection

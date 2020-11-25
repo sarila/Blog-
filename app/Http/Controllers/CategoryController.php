@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Response;
-use App\Post;
+use App\Category;
+use Response;
 
-class PostController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('id', 'DESC')->get();
-        return view('Post/index', compact('posts'));
+        $categories = Category::all();
+        return view('category', compact('categories'));
     }
 
     /**
@@ -37,15 +37,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $posts  = new Post();
-        $posts->title = $request->title;
-        $posts->keywords = $request->keywords;
-        $posts->description = $request->description;
-        $posts->fullstory = $request->fullstory;
-        $posts->f_image = $request->f_image;
-        $posts->status = $request->status;
-        $posts->save();
-        return Response()->json($posts);
+        $category = new Category();
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->status = $request->status;
+        $category->save();
+        return Response()->json($category);
     }
 
     /**
@@ -56,7 +53,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -67,9 +64,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::find($id);
-        return response()->json($post);
-
+        $category = Category::find($id);
+        return response()->json($category);
     }
 
     /**
@@ -79,9 +75,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $category =  Category::find($request->id);
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        $category->status = $request->input('status');
+        $category->save();
+        return Response()->json($category);
     }
 
     /**
